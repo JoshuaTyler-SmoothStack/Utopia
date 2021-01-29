@@ -1,4 +1,4 @@
-package com.ss.service;
+package com.ss.jdbc;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

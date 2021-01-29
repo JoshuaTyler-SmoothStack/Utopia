@@ -1,4 +1,4 @@
-package com.ss.service;
+package com.ss.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,7 +27,7 @@ public class DatabaseException extends Exception {
         return DatabaseException.getDatabaseExceptionMessage(connection, e, true);
 
       } catch (SQLException rollbackError) {
-        return DatabaseException.getDatabaseExceptionMessage(connection, e, false);
+        return DatabaseException.getDatabaseExceptionMessage(connection, rollbackError, false);
       }
     }
     return DatabaseException.getDatabaseExceptionMessage(connection, e);

@@ -2,10 +2,7 @@ package com.ss.jdbc;
 
 import com.ss.dao.AirplaneDAO;
 import com.ss.entity.Airplane;
-import com.ss.service.DatabaseException;
-import com.ss.service.DatabaseUtils;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,8 +13,6 @@ public class AirplaneDBC {
 
   /**
    * @param args
-   * @throws SQLException
-   * @throws ClassNotFoundException
    */
   public static void main(String[] args) throws DatabaseException {
     // AirplaneDBC airlines = new AirplaneDBC();
@@ -33,6 +28,10 @@ public class AirplaneDBC {
       return new AirplaneDAO(connection).getAllAirplanes();
     } catch (Exception e) {
       throw new DatabaseException(false, connection, e);
+    } finally {
+      try {
+        connection.close();
+      } catch(Exception e){}
     }
   }
 
@@ -43,16 +42,24 @@ public class AirplaneDBC {
       return new AirplaneDAO(connection).getAllAirplanesById(id);
     } catch (Exception e) {
       throw new DatabaseException(false, connection, e);
+    } finally {
+      try {
+        connection.close();
+      } catch(Exception e){}
     }
   }
 
-  public void saveAirplane(Airplane airplane) throws DatabaseException {
+  public static void saveAirplane(Airplane airplane) throws DatabaseException {
     Connection connection = null;
     try {
       connection = new DatabaseUtils().getConnection();
       new AirplaneDAO(connection).createAirplane(airplane);
     } catch (Exception e) {
       throw new DatabaseException(true, connection, e);
+    } finally {
+      try {
+        connection.close();
+      } catch(Exception e){}
     }
   }
 }
