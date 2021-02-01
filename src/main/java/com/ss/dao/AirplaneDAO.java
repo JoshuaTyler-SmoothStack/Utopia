@@ -1,6 +1,9 @@
 package com.ss.dao;
 
+import com.ss.KitUtils;
 import com.ss.entity.Airplane;
+import com.ss.entity.AirplaneType;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +22,9 @@ public class AirplaneDAO extends BaseDAO<Airplane> {
 
   public void createAirplane(Airplane airplane)
     throws ClassNotFoundException, SQLException {
+      System.out.println(KitUtils.ANSI_TEST_PASS + airplane.getAirplaneType().getId() + KitUtils.ANSI_RESET);
     save(
-      "insert into airplane (type_id) values (?)",
+      "INSERT INTO airplane (type_id) VALUES (?)",
       new Object[] { airplane.getAirplaneType().getId() }
     );
   }
@@ -28,25 +32,25 @@ public class AirplaneDAO extends BaseDAO<Airplane> {
   public void updateAirplane(Airplane airplane)
     throws ClassNotFoundException, SQLException {
     save(
-      "update airplane set type_id = ? where id = ?",
-      new Object[] { airplane.getAirplaneType().getId(), airplane.getId() }
+      "UPDATE airplane SET WHERE id = ? type_id = ? ",
+      new Object[] { airplane.getId(), airplane.getAirplaneType().getId() }
     );
   }
 
   public void deleteAirplane(Airplane airplane)
     throws ClassNotFoundException, SQLException {
-    save("delete from airplane id = ?", new Object[] { airplane.getId() });
+    save("DELETE FROM airplane id = ?", new Object[] { airplane.getId() });
   }
 
   public List<Airplane> getAllAirplanes()
     throws ClassNotFoundException, SQLException {
-    return read("select * from airplane", null);
+    return read("SELECT * FROM airplane", null);
   }
 
   public List<Airplane> getAllAirplanesById(Integer id)
     throws ClassNotFoundException, SQLException {
     return read(
-      "select * from airplane where id = ?",
+      "SELECT * FROM airplane WHERE id = ?",
       new Object[] { id }
     );
   }
@@ -54,7 +58,7 @@ public class AirplaneDAO extends BaseDAO<Airplane> {
   public List<Airplane> getAllAirplanesByType(Integer typeId)
     throws ClassNotFoundException, SQLException {
     return read(
-      "select * from airplane where type_id = ?",
+      "SELECT * FROM airplane WHERE type_id = ?",
       new Object[] { typeId }
     );
   }
@@ -64,9 +68,8 @@ public class AirplaneDAO extends BaseDAO<Airplane> {
     throws SQLException, ClassNotFoundException {
     List<Airplane> airplanes = new ArrayList<>();
     while (rs.next()) {
-      Airplane airplane = new Airplane();
-      airplane.getAirplaneType().setId(rs.getInt("type_id"));
-      airplane.setId(rs.getInt("id"));
+      AirplaneType type = new AirplaneType(rs.getInt("type_id"), null);
+      Airplane airplane = new Airplane(rs.getInt("id"), type);
       airplanes.add(airplane);
     }
     return airplanes;

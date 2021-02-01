@@ -1,7 +1,8 @@
 package com.ss.jdbc;
 
 import java.sql.Connection;
-import java.sql.SQLException;
+
+import com.ss.KitUtils;
 
 /**
  * Provides a custom Exception for alerting
@@ -26,7 +27,7 @@ public class DatabaseException extends Exception {
         connection.rollback();
         return DatabaseException.getDatabaseExceptionMessage(connection, e, true);
 
-      } catch (SQLException rollbackError) {
+      } catch (Exception rollbackError) {
         return DatabaseException.getDatabaseExceptionMessage(connection, rollbackError, false);
       }
     }
@@ -36,10 +37,10 @@ public class DatabaseException extends Exception {
   
   private static String getDatabaseExceptionMessage(Connection connection, Exception e) {
     return  (connection != null)
-    ? "[ERROR] Database: Connection has failed!\n" + 
-    "Connection: " + connection + "\n" 
-    + "Error: " + e
-    : "[ERROR] Database: Unable to establish Database connection!\n" + e;
+    ? "\n" + KitUtils.ANSI_TEST_FAIL + "[ERROR] Database: Connection has failed!" + 
+    "\nConnection: " + connection + 
+    "\nError: " + e + KitUtils.ANSI_RESET
+    : "\n" + KitUtils.ANSI_TEST_FAIL + "[ERROR] Database: Unable to establish Database connection!\n" + e + KitUtils.ANSI_RESET;
   }
 
   
@@ -48,10 +49,10 @@ public class DatabaseException extends Exception {
       ? "Rolled back changes successfully."
       : "Unable to rollback changes!";
     return  (connection != null)
-    ? "[ERROR] Database: Connection has failed!\n" + 
-    rollbackMessage + "\n" +
-    "Connection: " + connection + "\n" 
-    + "Error: " + e
-    : "[ERROR] Database: Unable to establish Database connection!\n" + e;
+    ? "\n" + KitUtils.ANSI_TEST_FAIL + "[ERROR] Database: Connection has failed!" + 
+    "\n" + rollbackMessage + 
+    "\nConnection: " + connection +  
+    "\nError: " + e  + KitUtils.ANSI_RESET
+    : "\n" + KitUtils.ANSI_TEST_FAIL + "[ERROR] Database: Unable to establish Database connection!\n" + e + KitUtils.ANSI_RESET;
   }
 }

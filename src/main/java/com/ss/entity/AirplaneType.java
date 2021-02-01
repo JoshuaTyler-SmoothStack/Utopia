@@ -1,7 +1,6 @@
 package com.ss.entity;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author Joshua Tyler
@@ -13,12 +12,11 @@ public class AirplaneType implements Serializable {
 
   private Integer id;
   private Integer maxCapacity;
-  private List<Airplane> airplanes;
 
   public AirplaneType(Integer id, Integer maxCapacity) {
     super();
-    this.id = id;
-    this.maxCapacity = maxCapacity;
+    this.setId(id);
+    this.setMaxCap(maxCapacity);
   }
 
 	//region Id
@@ -33,7 +31,7 @@ public class AirplaneType implements Serializable {
 
 
 	//region maxCapacity
-  public Integer getmaxCapacity() {
+  public Integer getMaxCapacity() {
     return maxCapacity;
   }
 
@@ -42,16 +40,6 @@ public class AirplaneType implements Serializable {
 	}
 	//endregion
 
-
-	// region airplances
-  public List<Airplane> getAirplanes() {
-    return airplanes;
-  }
-
-  public void setAirplanes(List<Airplane> airplanes) {
-    this.airplanes = airplanes;
-	}
-	//endregion
 
   /*
    * (non-Javadoc)

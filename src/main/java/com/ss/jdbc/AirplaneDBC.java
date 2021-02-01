@@ -1,7 +1,11 @@
 package com.ss.jdbc;
 
 import com.ss.dao.AirplaneDAO;
+import com.ss.dao.AirplaneTypeDAO;
 import com.ss.entity.Airplane;
+import com.ss.entity.AirplaneType;
+import com.ss.service.ConnectionService;
+
 import java.sql.Connection;
 import java.util.List;
 
@@ -14,52 +18,51 @@ public class AirplaneDBC {
   /**
    * @param args
    */
-  public static void main(String[] args) throws DatabaseException {
-    // AirplaneDBC airlines = new AirplaneDBC();
-    // airlines.saveAirplane();
-    // airlines.getAllAirplanesById();
-    // airlines.getAllAirplanes();
+  public static void main(String[] args) {
+    //Airplane newAirplane = new Airplane(1, new AirplaneType(1, 150));
+    Connection connection = null;
+    try {
+      connection = new ConnectionService().getConnection(false);
+      new AirplaneTypeDAO(connection).createAirplaneType(new AirplaneType(4, 900));
+      connection.commit();
+      connection.close();
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public static List<Airplane> getAllAirplanes() throws DatabaseException {
     Connection connection = null;
     try {
-      connection = new DatabaseUtils().getConnection();
+      connection = new ConnectionService().getConnection(true);
       return new AirplaneDAO(connection).getAllAirplanes();
     } catch (Exception e) {
       throw new DatabaseException(false, connection, e);
-    } finally {
-      try {
-        connection.close();
-      } catch(Exception e){}
     }
   }
 
   public static List<Airplane> getAllAirplanesById(Integer id) throws DatabaseException {
     Connection connection = null;
     try {
-      connection = new DatabaseUtils().getConnection();
+      connection = new ConnectionService().getConnection(true);
       return new AirplaneDAO(connection).getAllAirplanesById(id);
     } catch (Exception e) {
       throw new DatabaseException(false, connection, e);
-    } finally {
-      try {
-        connection.close();
-      } catch(Exception e){}
     }
   }
 
   public static void saveAirplane(Airplane airplane) throws DatabaseException {
     Connection connection = null;
     try {
-      connection = new DatabaseUtils().getConnection();
+      connection = new ConnectionService().getConnection(false);
       new AirplaneDAO(connection).createAirplane(airplane);
     } catch (Exception e) {
       throw new DatabaseException(true, connection, e);
     } finally {
-      try {
+      // @TODO: ConnectionService.poolConnection(connection)
+      try{
         connection.close();
-      } catch(Exception e){}
+      }catch(Exception e){}
     }
   }
 }
